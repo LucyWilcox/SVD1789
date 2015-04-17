@@ -46,15 +46,9 @@ list2 = [True, True, False, False]
 house_data = get_data(house_votes)
 house_dict = get_votes_names(house_data)
 print house_dict
-#print house_dict
 
 voters = create_voter_list(house_dict)
 for voter in voters:
 	print voter
 	print house_dict[voter]
-	print to_full_list(house_dict[voter], house_votes)
-
-
-# for voter in voters:
-# 	for vote in voter:
-# 		if vote == True
+	#print to_full_list(house_dict[voter], house_votes)
