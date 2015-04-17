@@ -1,45 +1,59 @@
 import csv
 from votelist import house_votes, senate_votes
 
-def get_votes_names(data,bill):
-	data = data[1:len(data)]
-	name = {}
+def get_votes_names(data):
 	votes = {}
 
-	for vote in data:
-		vote = vote.replace(","," ").split()
+	for entry in data:
+		data_list = data[entry]
+		bill = entry
+		for vote in data_list:
+			vote = vote.replace(","," ").split()
 
-		if vote[3] == 'Yea':
-			if check_dictionary(votes, vote[4]+' '+vote[5]) == True:
-				vote = True
-				name.update({bill:vote})
-			else:
-				votes.update({vote[4]+' '+vote[5]: {bill:True}})
-				
-		elif vote[3] == 'Nay':
-			if check_dictionary(votes, vote[4]+' '+vote[5]) == True:
-				vote = True
-				name.update({bill:vote})
-			else:
-				votes.update({vote[4]+' '+vote[5]: {bill:False}})
+			if vote[3] == 'Yea':
+				name = {}
+				person = vote[4]+' '+vote[5]
+				if check_dictionary(votes, person) == True:
+					name[bill] = True
+					votes[person] += [name]
+				else:
+					name[bill] = True
+					votes[person] = [name]
+			
+			elif vote[3] == 'Nay':
+				name = {}
+				person = vote[4]+' '+vote[5]
+				if check_dictionary(votes, person) == True:
+					name[bill] = False
+					votes[person] += [name]
+				else:
+					name[bill] = False
+					votes[person] = [name]
 
-		elif vote[3] == 'Not':
-			if check_dictionary(votes, vote[5]+' '+vote[6]) == True:
-				vote = True
-				name.update({bill:vote})
-			else:
-				votes.update({vote[5]+' '+vote[6]: {bill:False}})
+			elif vote[3] == 'Not':
+				name = {}
+				person = vote[5]+' '+vote[6]
+				if check_dictionary(votes, person) == True:
+					name[bill] = False
+					votes[person] += [name]
+				else:
+					name[bill] = False
+					votes[person] = [name]
 				
 	return votes
 
 def get_data(house_votes):
 	data = {}
-	for vote in house_votes:
-		with open(vote, 'rb') as csvfile:
+
+	for bill in house_votes:
+		people = {}
+		person = []
+		with open(bill, 'rb') as csvfile:
 		    spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
 		    for row in spamreader:
-		        data.update({vote:(" ".join(row)})
-		        
+		    	person.append(" ".join(row))
+    		data.update({bill:person})
+    
 	return data
 
 def check_dictionary(votes, name):
@@ -49,6 +63,6 @@ def check_dictionary(votes, name):
 		return False
 
 if __name__ == '__main__':
-	bill = 'bill'
 	data = get_data(house_votes)
-	print get_votes_names(data,bill)
+	print get_votes_names(data)
+	
