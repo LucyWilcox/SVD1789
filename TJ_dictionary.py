@@ -1,6 +1,12 @@
 import csv
 from votelist import house_votes, senate_votes
 
+def check_dictionary(votes, name):
+	if name in votes:
+		return True
+	else:
+		return False
+
 def get_votes_names(data):
 	votes = {}
 
@@ -56,11 +62,6 @@ def get_data(house_votes):
     
 	return data
 
-def check_dictionary(votes, name):
-	if name in votes:
-		return True
-	else:
-		return False
 
 if __name__ == '__main__':
 	data = get_data(house_votes)
