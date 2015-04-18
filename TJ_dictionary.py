@@ -66,4 +66,4 @@ def get_data(house_votes):
 if __name__ == '__main__':
 	data = get_data(house_votes)
 	print get_votes_names(data)
-	
+
