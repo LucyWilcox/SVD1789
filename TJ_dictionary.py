@@ -8,44 +8,40 @@ def check_dictionary(votes, name):
 		return False
 
 def get_votes_names(data):
-	votes = {}
-
+	name = {}
 	for entry in data:
+		votes = {}
 		data_list = data[entry]
 		bill = entry
 		for vote in data_list:
 			vote = vote.replace(","," ").split()
-
 			if vote[3] == 'Yea':
-				name = {}
-				person = vote[4]+' '+vote[5]
+				
+				person = str(vote[4]+' '+vote[5])
 				if check_dictionary(votes, person) == True:
 					name[bill] = True
-					votes[person] += [name]
 				else:
 					name[bill] = True
-					votes[person] = [name]
+					votes.update({person:name})	
 			
 			elif vote[3] == 'Nay':
-				name = {}
+				
 				person = vote[4]+' '+vote[5]
 				if check_dictionary(votes, person) == True:
 					name[bill] = False
-					votes[person] += [name]
 				else:
 					name[bill] = False
-					votes[person] = [name]
+					votes.update({person:name})	
 
 			elif vote[3] == 'Not':
-				name = {}
+				
 				person = vote[5]+' '+vote[6]
 				if check_dictionary(votes, person) == True:
 					name[bill] = False
-					votes[person] += [name]
 				else:
 					name[bill] = False
-					votes[person] = [name]
-				
+					votes.update({person:name})	
+
 	return votes
 
 def get_data(house_votes):
