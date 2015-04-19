@@ -1,4 +1,7 @@
-from numpy import matrix, zeros, shape
+
+
+
+from numpy import matrix, zeros, shape, set_printoptions, nan
 from votelist import house_votes, house_voters
 from TJ_dictionary import get_data, get_votes_names, to_complete_dict
 
@@ -11,7 +14,8 @@ def compare_list(list1, list2):
 	for entry in list1:
 		if entry == True:
 			total_true += 1
-
+	if total_true == 0:
+		return 0
 	true_count = 0
 	for i in range(len(list1)):
 		if list1[i] == True & list2[i] == True:
@@ -36,30 +40,29 @@ def to_full_list(voter, house_votes):
 # 		voters.append(key)
 # 	return voters
 
-def lists_of_votes(final_house_dict, house_voters, house_votes):
-	for voter1 in house_voters:
-		for voter2 in house_voters:
-			to_full_list(voter1, house_votes)
-		#print to_full_list(final_house_dict[voter], house_votes)
+def votes_at_i(i, house_voters, house_votes, final_house_dict):
+	voter = house_voters[i]
+	return to_full_list(final_house_dict[voter], house_votes)
 
 
-
+def matrix_creation(house_voters, house_votes,final_house_dict):
+	for i in range(len(house_voters) -1):
+		voter1 = votes_at_i(i, house_voters, house_votes, final_house_dict)
+		for j in range(len(house_voters) -1):
+			voter2 = votes_at_i(j, house_voters, house_votes, final_house_dict)
+			agreement = compare_list(voter1, voter2)
+			house_matrix[i][j] = agreement
+	return house_matrix
 
 list1 = [True, True, True, False]
 list2 = [True, True, False, False]
 
 #print compare_list(list1, list2)
-
+set_printoptions(threshold=nan)
 house_data = get_data(house_votes)
 house_dict = get_votes_names(house_data, house_voters)
 final_house_dict = to_complete_dict(house_dict)
-#lists_of_votes(final_house_dict, house_voters, house_votes)
+agreement_matrix = matrix_creation(house_voters, house_votes,final_house_dict)
+#print agreement_matrix
 #print house_dict
 
-
-
-
-for i in range(len(house_voters) -1):
-	#for j in range(len(house_voters) -1):
-
-	print to_full_list(house_dict[voter], house_votes)

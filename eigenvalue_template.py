@@ -1,10 +1,14 @@
 import numpy as np
 import math
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+from TJMatrix import agreement_matrix
+
+
 """A is our adjacency matrix with people along both axes and their
 voting percentages in the matrix"""
 
-A = np.matrix('4 2 1; 1 4 5; 3 3 2')
+#A = np.matrix('4 2 1; 1 4 5; 3 3 2')
+A = agreement_matrix
 # 
 ATA = A.transpose() * A
 evecs_ATA = np.linalg.eig(ATA)[1]
