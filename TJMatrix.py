@@ -1,11 +1,10 @@
-from numpy import matrix, zeros
-from votelist import house_votes 
-from TJ_dictionary import get_data, get_votes_names
+from numpy import matrix, zeros, shape
+from votelist import house_votes, house_voters
+from TJ_dictionary import get_data, get_votes_names, to_complete_dict
 
-# num_members = len(house_dict)
+num_members = len(house_voters)
 
-# house_matrix = zeros(shape(num_members, num_members))
-
+house_matrix = zeros((num_members, num_members))
 
 def compare_list(list1, list2):
 	total_true = 0
@@ -25,16 +24,24 @@ def to_full_list(voter, house_votes):
 	for bill in house_votes:
 		if bill not in voter.keys():
 			voting_list.append(False)
+			print t
 		else:
 			voting_list.append(voter[bill])
 	return voting_list
 
-def create_voter_list(house_dict):
-	"""Generates a list of voters names """
-	voters = []
-	for key in sorted(house_dict):
-		voters.append(key)
-	return voters
+# def create_voter_list(house_dict):
+# 	"""Generates a list of voters names """
+# 	voters = []
+# 	for key in sorted(house_dict):
+# 		voters.append(key)
+# 	return voters
+
+def lists_of_votes(final_house_dict, house_voters, house_votes):
+	for voter1 in house_voters:
+		for voter2 in house_voters:
+			to_full_list(voter1, house_votes)
+		#print to_full_list(final_house_dict[voter], house_votes)
+
 
 
 
@@ -44,11 +51,15 @@ list2 = [True, True, False, False]
 #print compare_list(list1, list2)
 
 house_data = get_data(house_votes)
-house_dict = get_votes_names(house_data)
-print house_dict
+house_dict = get_votes_names(house_data, house_voters)
+final_house_dict = to_complete_dict(house_dict)
+#lists_of_votes(final_house_dict, house_voters, house_votes)
+#print house_dict
 
-voters = create_voter_list(house_dict)
-for voter in voters:
-	print voter
-	print house_dict[voter]
-	#print to_full_list(house_dict[voter], house_votes)
+
+
+
+for i in range(len(house_voters) -1):
+	#for j in range(len(house_voters) -1):
+
+	print to_full_list(house_dict[voter], house_votes)
