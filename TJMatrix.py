@@ -1,7 +1,7 @@
 
 
 
-from numpy import matrix, zeros, shape, set_printoptions, nan
+from numpy import matrix, zeros, shape, set_printoptions, nan, asarray, savetxt
 from votelist import house_votes, house_voters
 from TJ_dictionary import get_data, get_votes_names, to_complete_dict
 
@@ -64,5 +64,8 @@ house_dict = get_votes_names(house_data, house_voters)
 final_house_dict = to_complete_dict(house_dict)
 agreement_matrix = matrix_creation(house_voters, house_votes,final_house_dict)
 print agreement_matrix
+a = asarray(agreement_matrix)
+savetxt("TJcsvmatrix.csv", a, delimiter = ",")
+#print agreement_matrix.shape
 #print house_dict
 
