@@ -2,12 +2,14 @@
 
 
 from numpy import matrix, zeros, shape, set_printoptions, nan, asarray, savetxt
-from votelist import house_votes, house_voters
+from votelist import house_votes, house_voters, senate_votes, senate_voters
 from TJ_dictionary import get_data, get_votes_names, to_complete_dict
 
-num_members = len(house_voters)
+house_num_members = len(house_voters)
+senate_num_members = len(senate_voters)
 
-house_matrix = zeros((num_members, num_members))
+house_matrix = zeros((house_num_members, house_num_members))
+senate_matrix = zeros((senate_num_members -1, senate_num_members-1))
 
 def compare_list(list1, list2):
 	total_true = 0
@@ -23,12 +25,11 @@ def compare_list(list1, list2):
 	percent_match = float(true_count)/total_true
 	return percent_match
 
-def to_full_list(voter, house_votes):
+def to_full_list(voter, votes):
 	voting_list = []
-	for bill in house_votes:
+	for bill in votes:
 		if bill not in voter.keys():
 			voting_list.append(False)
-			print t
 		else:
 			voting_list.append(voter[bill])
 	return voting_list
@@ -40,32 +41,29 @@ def to_full_list(voter, house_votes):
 # 		voters.append(key)
 # 	return voters
 
-def votes_at_i(i, house_voters, house_votes, final_house_dict):
-	voter = house_voters[i]
-	return to_full_list(final_house_dict[voter], house_votes)
+def votes_at_i(i, voters, votes, final_dict):
+	voter = voters[i]
+	return to_full_list(final_dict[voter], votes)
 
 
-def matrix_creation(house_voters, house_votes,final_house_dict):
-	for i in range(len(house_voters) -1):
-		voter1 = votes_at_i(i, house_voters, house_votes, final_house_dict)
-		for j in range(len(house_voters) -1):
-			voter2 = votes_at_i(j, house_voters, house_votes, final_house_dict)
+def matrix_creation(voters, votes, final_dict):
+	for i in range(len(voters) -1):
+		voter1 = votes_at_i(i, voters, votes, final_dict)
+		for j in range(len(voters) -1):
+			voter2 = votes_at_i(j, voters, votes, final_dict)
 			agreement = compare_list(voter1, voter2)
-			house_matrix[i][j] = agreement
-	return house_matrix
+			senate_matrix[i][j] = agreement
+	return senate_matrix
 
-list1 = [True, True, True, False]
-list2 = [True, True, False, False]
 
-#print compare_list(list1, list2)
 set_printoptions(threshold=nan)
-house_data = get_data(house_votes)
-house_dict = get_votes_names(house_data, house_voters)
-final_house_dict = to_complete_dict(house_dict)
-agreement_matrix = matrix_creation(house_voters, house_votes,final_house_dict)
+data = get_data(senate_votes)
+the_dict = get_votes_names(data, senate_voters)
+final_dict = to_complete_dict(the_dict)
+agreement_matrix = matrix_creation(senate_voters, senate_votes,final_dict)
 print agreement_matrix
 a = asarray(agreement_matrix)
-savetxt("TJcsvmatrix.csv", a, delimiter = ",")
+savetxt("TJcsvmatrixsenate.csv", a, delimiter = ",")
 #print agreement_matrix.shape
 #print house_dict
 

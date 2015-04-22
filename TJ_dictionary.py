@@ -1,30 +1,30 @@
 import csv
-from votelist import house_votes, senate_votes, house_voters
+from votelist import house_votes, senate_votes, house_voters, senate_voters
 
 
-def get_votes_names(data, house_voters):
-	full_dict = dict.fromkeys(house_voters)
+def get_votes_names(data, voters):
+	full_dict = dict.fromkeys(voters)
 	for bill in data:
 		for vote in data[bill]:
 			vote = vote.replace(","," ").split()
-			if vote[3] == 'Yea':
-				person = str(vote[4]+' '+vote[5])
+			if vote[2] == 'Yea':
+				person = str(vote[3]+' '+vote[4])
 				if full_dict[person] == None:
 					full_dict[person] = [(bill, True)]
 				else:
 					full_dict[person].append((bill, True))
 			
-			elif vote[3] == 'Nay':
+			elif vote[2] == 'Nay':
 				
-				person = vote[4]+' '+vote[5]
+				person = vote[3]+' '+vote[4]
 				if full_dict[person] == None:
 					full_dict[person] = [(bill, False)]
 				else:
 					full_dict[person].append((bill, False))
 
-			elif vote[3] == 'Not':
+			elif vote[2] == 'Not':
 				
-				person = vote[5]+' '+vote[6]
+				person = vote[4]+' '+vote[5]
 				if full_dict[person] == None:
 					full_dict[person] = [(bill, False)]
 				else:
@@ -33,17 +33,17 @@ def get_votes_names(data, house_voters):
 	return full_dict
 
 
-def to_complete_dict(house_dict):
-	for key, value in house_dict.iteritems():
-		house_dict[key] = dict(value)
+def to_complete_dict(the_dict):
+	for key, value in the_dict.iteritems():
+		the_dict[key] = dict(value)
 
-	return house_dict
+	return the_dict
 
 
-def get_data(house_votes):
+def get_data(votes):
 	data = {}
 
-	for bill in house_votes:
+	for bill in votes:
 		people = {}
 		person = []
 		with open(bill, 'rb') as csvfile:
@@ -56,9 +56,11 @@ def get_data(house_votes):
 
 
 if __name__ == '__main__':
-	data = get_data(house_votes)
-	house_dict = get_votes_names(data, house_voters)
-	final_dict = to_complete_dict(house_dict)
+	votes = senate_votes
+	voters  = senate_voters
+	data = get_data(votes)
+	the_dict = get_votes_names(data, voters)
+	final_dict = to_complete_dict(the_dict)
 	print final_dict
 	#print house_dict
 	#list_of_names = create_voter_list(house_dict)

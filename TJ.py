@@ -1,65 +1,5 @@
 import csv
 from votelist import house_votes, senate_votes
-from numpy import matrix
-
-
-
-# with open('congress_votes_1-1_h35.csv', 'rb') as csvfile:
-#     spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-#     for row in spamreader:
-#         print " ".join(row)
-
-class Voter(object):
-	def __init__(self, name, location, voting_record):
-		self.name = name
-		self.location = location
-		self.voting_record = voting_record
-
-
-
-import csv
-from votelist import house_votes, senate_votes
-
-def get_votes_names(data,bill):
-	data = data[1:len(data)]
-	name = {}
-	votes = {}
-
-	for vote in data:
-		vote = vote.replace(","," ").split()
-
-		if vote[3] == 'Yea':
-			if check_dictionary(votes, vote[4]+' '+vote[5]) == True:
-				vote = True
-				name.update({bill:vote})
-			else:
-				votes.update({vote[4]+' '+vote[5]: {bill:True}})
-				
-		elif vote[3] == 'Nay':
-			if check_dictionary(votes, vote[4]+' '+vote[5]) == True:
-				vote = True
-				name.update({bill:vote})
-			else:
-				votes.update({vote[4]+' '+vote[5]: {bill:False}})
-
-		elif vote[3] == 'Not':
-			if check_dictionary(votes, vote[5]+' '+vote[6]) == True:
-				vote = True
-				name.update({bill:vote})
-			else:
-				votes.update({vote[5]+' '+vote[6]: {bill:False}})
-				
-	return votes
-
-def get_data(house_votes):
-	data = {}
-	for vote in house_votes:
-		with open(vote, 'rb') as csvfile:
-		    spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-		    for row in spamreader:
-		        data.update({vote:(" ".join(row))})
-		        
-	return data
 
 def check_dictionary(votes, name):
 	if name in votes:
@@ -67,7 +7,68 @@ def check_dictionary(votes, name):
 	else:
 		return False
 
+def get_votes_names(data):
+	name = {}
+	for entry in data:
+		votes = {}
+		data_list = data[entry]
+		bill = entry
+		for vote in data_list:
+			print vote
+			vote = vote.replace(","," ").split()
+			if vote[2] == 'Yea':
+				person = str(vote[3]+' '+vote[4])
+				if check_dictionary(votes, person) == True:
+					name[bill] = True
+				else:
+					name[bill] = True
+					votes.update({person:name})	
+			
+			elif vote[2] == 'Nay':
+				
+				person = vote[3]+' '+vote[4]
+				if check_dictionary(votes, person) == True:
+					name[bill] = False
+				else:
+					name[bill] = False
+					votes.update({person:name})	
+
+			elif vote[2] == 'Not':
+				
+				person = vote[4]+' '+vote[5]
+				if check_dictionary(votes, person) == True:
+					name[bill] = False
+				else:
+					name[bill] = False
+					votes.update({person:name})	
+
+	return votes
+
+def get_data(votes):
+	data = {}
+
+	for bill in votes:
+		people = {}
+		person = []
+		with open(bill, 'rb') as csvfile:
+		    spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+		    for row in spamreader:
+		    	person.append(" ".join(row))
+    		data.update({bill:person})
+    
+	return data
+
+
+def create_voter_list(house_dict):
+	"""Generates a list of voters names """
+	voters = []
+	for key in sorted(house_dict):
+		voters.append(key)
+	return voters
+
 if __name__ == '__main__':
-	bill = 'bill'
-	data = get_data(house_votes)
-	print get_votes_names(data,bill)
+	print senate_votes
+	data = get_data(senate_votes)
+	senate_data = get_votes_names(data)
+	print senate_data
+	print create_voter_list(senate_data)
