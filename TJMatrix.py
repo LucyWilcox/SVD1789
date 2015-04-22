@@ -63,6 +63,6 @@ house_data = get_data(house_votes)
 house_dict = get_votes_names(house_data, house_voters)
 final_house_dict = to_complete_dict(house_dict)
 agreement_matrix = matrix_creation(house_voters, house_votes,final_house_dict)
-#print agreement_matrix
+print agreement_matrix
 #print house_dict
 
