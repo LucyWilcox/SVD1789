@@ -2,11 +2,11 @@
 
 
 from numpy import matrix, zeros, shape, set_printoptions, nan, asarray, savetxt
-from votelist import house_votes, house_voters, senate_votes, senate_voters
+from votelist import house_votes, house_voters, senate_votes, senate_voters, senate_2015_votes, house_2015_votes, house_2015_voters, senate_2015_voters
 from TJ_dictionary import get_data, get_votes_names, to_complete_dict
 
 house_num_members = len(house_voters)
-senate_num_members = len(senate_voters)
+senate_num_members = len(senate_2015_voters)
 
 house_matrix = zeros((house_num_members, house_num_members))
 senate_matrix = zeros((senate_num_members -1, senate_num_members-1))
@@ -57,13 +57,13 @@ def matrix_creation(voters, votes, final_dict):
 
 
 set_printoptions(threshold=nan)
-data = get_data(senate_votes)
-the_dict = get_votes_names(data, senate_voters)
+data = get_data(senate_2015_votes)
+the_dict = get_votes_names(data, senate_2015_voters)
 final_dict = to_complete_dict(the_dict)
-agreement_matrix = matrix_creation(senate_voters, senate_votes,final_dict)
+agreement_matrix = matrix_creation(senate_2015_voters, senate_2015_votes,final_dict)
 print agreement_matrix
 a = asarray(agreement_matrix)
-savetxt("TJcsvmatrixsenate.csv", a, delimiter = ",")
-#print agreement_matrix.shape
+savetxt("TJcsvmatrix2015senate.csv", a, delimiter = ",")
+print agreement_matrix.shape
 #print house_dict
 

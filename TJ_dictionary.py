@@ -1,5 +1,5 @@
 import csv
-from votelist import house_votes, senate_votes, house_voters, senate_voters
+from votelist import house_votes, senate_votes, house_voters, senate_voters, senate_2015_votes, house_2015_votes, house_2015_voters, senate_2015_voters
 
 
 def get_votes_names(data, voters):
@@ -56,13 +56,12 @@ def get_data(votes):
 
 
 if __name__ == '__main__':
-	votes = senate_votes
-	voters  = senate_voters
+	votes = senate_2015_votes
+	voters  = senate_2015_voters
 	data = get_data(votes)
 	the_dict = get_votes_names(data, voters)
 	final_dict = to_complete_dict(the_dict)
 	print final_dict
-	#print house_dict
 	#list_of_names = create_voter_list(house_dict)
 	#names = name_dictionary(list_of_names)
 	#print vote_dictionary(data,names)
