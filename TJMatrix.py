@@ -5,10 +5,10 @@ from numpy import matrix, zeros, shape, set_printoptions, nan, asarray, savetxt
 from votelist import house_votes, house_voters, senate_votes, senate_voters, senate_2015_votes, house_2015_votes, house_2015_voters, senate_2015_voters
 from TJ_dictionary import get_data, get_votes_names, to_complete_dict
 
-house_num_members = len(house_voters)
+house_num_members = len(house_2015_voters)
 senate_num_members = len(senate_2015_voters)
 
-house_matrix = zeros((house_num_members, house_num_members))
+house_matrix = zeros((house_num_members - 1, house_num_members -1))
 senate_matrix = zeros((senate_num_members -1, senate_num_members-1))
 
 def compare_list(list1, list2):
@@ -52,18 +52,18 @@ def matrix_creation(voters, votes, final_dict):
 		for j in range(len(voters) -1):
 			voter2 = votes_at_i(j, voters, votes, final_dict)
 			agreement = compare_list(voter1, voter2)
-			senate_matrix[i][j] = agreement
-	return senate_matrix
+			house_matrix[i][j] = agreement
+	return house_matrix
 
 
 set_printoptions(threshold=nan)
-data = get_data(senate_2015_votes)
-the_dict = get_votes_names(data, senate_2015_voters)
+data = get_data(house_2015_votes)
+the_dict = get_votes_names(data, house_2015_voters)
 final_dict = to_complete_dict(the_dict)
-agreement_matrix = matrix_creation(senate_2015_voters, senate_2015_votes,final_dict)
+agreement_matrix = matrix_creation(house_2015_voters, house_2015_votes,final_dict)
 print agreement_matrix
 a = asarray(agreement_matrix)
-savetxt("TJcsvmatrix2015senate.csv", a, delimiter = ",")
+savetxt("TJcsvmatrix2015house.csv", a, delimiter = ",")
 print agreement_matrix.shape
 #print house_dict
 

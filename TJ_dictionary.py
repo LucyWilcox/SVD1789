@@ -7,24 +7,24 @@ def get_votes_names(data, voters):
 	for bill in data:
 		for vote in data[bill]:
 			vote = vote.replace(","," ").split()
-			if vote[2] == 'Yea':
-				person = str(vote[3]+' '+vote[4])
+			if vote[3] == 'Yea':
+				person = str(vote[4]+' '+vote[5])
 				if full_dict[person] == None:
 					full_dict[person] = [(bill, True)]
 				else:
 					full_dict[person].append((bill, True))
 			
-			elif vote[2] == 'Nay':
+			elif vote[3] == 'Nay':
 				
-				person = vote[3]+' '+vote[4]
+				person = vote[4]+' '+vote[5]
 				if full_dict[person] == None:
 					full_dict[person] = [(bill, False)]
 				else:
 					full_dict[person].append((bill, False))
 
-			elif vote[2] == 'Not':
+			elif vote[3] == 'Not':
 				
-				person = vote[4]+' '+vote[5]
+				person = vote[5]+' '+vote[6]
 				if full_dict[person] == None:
 					full_dict[person] = [(bill, False)]
 				else:
@@ -56,12 +56,14 @@ def get_data(votes):
 
 
 if __name__ == '__main__':
-	votes = senate_2015_votes
-	voters  = senate_2015_voters
+	votes = house_2015_votes
+	voters  = house_2015_voters
 	data = get_data(votes)
 	the_dict = get_votes_names(data, voters)
 	final_dict = to_complete_dict(the_dict)
-	print final_dict
+	#print final_dict
+
+
 	#list_of_names = create_voter_list(house_dict)
 	#names = name_dictionary(list_of_names)
 	#print vote_dictionary(data,names)
